@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+*.log
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.nemo
+claude_headless/recovery/
+claude_headless/status.json
+claude_headless/status.tmp
+claude_headless/stop-events.jsonl

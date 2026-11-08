@@ -1,0 +1,17 @@
+name: Tests Windows
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -X utf8 -B -m unittest discover -s claude_headless -p 'test_*.py' -v
+      - shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          .\claude_headless\test_identity_control.ps1
+          .\claude_headless\test_stop_control.ps1
+          .\claude_headless\test_stabilization.ps1
