@@ -26,9 +26,33 @@ Les deux premières commandes contrôlent la disponibilité et l'état de Claude
 .\Stop-ClaudeDictationHeadless.ps1
 ```
 
-Le script d'arrêt refuse d'interrompre une opération en cours ou dont l'état est incertain. Vérifiez alors Claude avant de réessayer. Aucun démarrage automatique n'est installé.
+Le script d'arrêt refuse d'interrompre une opération en cours ou dont l'état est incertain. Vérifiez alors Claude avant de réessayer.
 
 Le résultat non vide remplace le presse-papiers. Une copie de récupération en clair est conservée dans `claude_headless/recovery/` avant l'extraction ; protégez et supprimez ces fichiers selon vos besoins. En cas d'erreur, l'état `blocked` exige une vérification de Claude avant la reprise. Le journal `claude_headless/stop-events.jsonl` contient des diagnostics sans transcription.
+
+## Démarrage automatique Windows (facultatif)
+
+Pour lancer la dictée après chaque redémarrage, à l'ouverture de votre session Windows :
+
+```powershell
+.\Install-ClaudeDictationHeadlessAutostart.ps1 -Check
+.\Install-ClaudeDictationHeadlessAutostart.ps1
+```
+
+Si votre stratégie PowerShell bloque ces scripts, utilisez `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install-ClaudeDictationHeadlessAutostart.ps1` (ajoutez `-Check` pour vérifier sans installer). Cette option concerne uniquement le processus lancé et ne change pas la stratégie permanente de Windows.
+
+La tâche `CodexClaudeDictationHeadless` lance le service en arrière-plan 15 secondes après l'ouverture de session, avec vos droits habituels. Elle fonctionne aussi sur batterie. Aucune connexion Windows ni élévation administrateur n'est automatisée ; Claude Desktop doit rester installé et connecté. Les lancements multiples sont empêchés par la tâche et par le service.
+
+L'option `-Check` ne modifie rien. L'installation détecte les anciens démarrages automatiques connus qui pourraient utiliser le même raccourci et préserve toute tâche existante différente. Relancer l'installation sur une tâche déjà conforme ne la remplace pas.
+
+Pour désactiver les prochains démarrages automatiques, sans interrompre la dictée actuellement lancée :
+
+```powershell
+.\Disable-ClaudeDictationHeadlessAutostart.ps1 -Check
+.\Disable-ClaudeDictationHeadlessAutostart.ps1
+```
+
+La tâche désactivée est conservée. Pour réactiver le démarrage automatique, activez-la dans le Planificateur de tâches. Si vous déplacez le dossier du projet, supprimez d'abord l'ancienne tâche depuis le Planificateur puis relancez l'installation depuis le nouvel emplacement.
 
 ## Limites et tests
 
